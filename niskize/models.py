@@ -1,13 +1,18 @@
 from django.db import models
 from django.db.models.fields.related import OneToOneField
 from django.contrib.auth.models import User
+import uuid
 # Create your models here.
 
 class Profile(models.Model):
   user=models.OneToOneField(User,on_delete=models.CASCADE)
+  name = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+
 
   def __str__(self):
     return self.user.username
+  
 
 
 class Articles(models.Model):
@@ -15,6 +20,7 @@ class Articles(models.Model):
   content = models.TextField()
   pub_date=models.DateTimeField(auto_now_add=True)
   profile = models.ForeignKey(Profile, on_delete=models.CASCADE,null=True)
+  category=models.CharField(max_length=70,null=True)
 
   def __str__(self):
     return self.title
