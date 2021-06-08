@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.fields.related import OneToOneField
 from django.contrib.auth.models import User
 import uuid
+from cloudinary.models import CloudinaryField
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 # Create your models here.
@@ -25,6 +26,7 @@ class Profile(models.Model):
 class Articles(models.Model):
   title = models.CharField(max_length=120)
   content = models.TextField()
+  image=CloudinaryField('article image',null=True)
   pub_date=models.DateTimeField(auto_now_add=True)
   profile = models.ForeignKey(Profile, on_delete=models.CASCADE,null=True)
   category=models.CharField(max_length=70,null=True)

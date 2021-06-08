@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import cloudinary
 
 
 
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'niskize.apps.NiskizeConfig',
+    'rest_framework',
+    'cloudinary',
 ]
 
 
