@@ -12,7 +12,7 @@ class Profile(models.Model):
   name = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
   def __str__(self):
-    return self.user.username
+    return str(self.name)
   
   @receiver(post_save, sender=User)
   def create_user_profile(sender, instance, created, **kwargs):
@@ -39,10 +39,10 @@ class Articles(models.Model):
 
 class Posts(models.Model):
   title=models.CharField(max_length=120,null=True)
-  content=models.TextField()
-  comment=models.TextField()
+  content=models.TextField(null=True)
+  comment=models.TextField(null=True)
   pub_date=models.DateTimeField(auto_now_add=True)
-  profile=models.ForeignKey(Profile,on_delete=models.CASCADE,null=True)
+  profile=models.ForeignKey(Profile,related_name='posts',on_delete=models.CASCADE,null=True)
 
   def __str__(self):
     return self.title
