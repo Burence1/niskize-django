@@ -18,6 +18,11 @@ urlpatterns = [
     path('api/article/<int:pk>/', views.SingleArticle.as_view()),
     #update/delete
     path('api/update/article/<int:pk>/', views.ArticleList.as_view()),
+
+    #subscribers
+    path('api/subscribers/', views.SubscribersList.as_view()),
+    #delete
+    path('api/update/subscriber/<int:pk>/', views.SubscribersList.as_view()),
 ]
 
 if settings.DEBUG:

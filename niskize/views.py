@@ -138,3 +138,37 @@ class SingleArticle(APIView):
     article = self.get_article(pk)
     serializers = self.serializer_class(article)
     return Response(serializers.data)
+
+class SubscribersList(APIView):
+  serializer_class=SubscribeSerializers
+
+  def get_subscriber(self, pk):
+    try:
+        return Subscribers.objects.get(pk=pk)
+    except Subscribers.DoesNotExist:
+        return Http404()
+
+  def get(self, request, format=None):
+    subscribers = Subscribers.objects.all()
+    serializers = self.serializer_class(subscribers, many=True)
+    return Response(serializers.data)
+
+  def post(self, request, format=None):
+    serializers = self.serializer_class(data=request.data)
+    if serializers.is_valid():
+      serializers.save()
+      subscribers = serializers.data
+      response = {
+          'data': {
+              'subscribers': dict(subscribers),
+              'status': 'success',
+              'message': 'subscriber added successfully',
+          }
+      }
+      return Response(response, status=status.HTTP_200_OK)
+    return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    subscribers = self.get_subscriber(pk)
+    subscribers.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
