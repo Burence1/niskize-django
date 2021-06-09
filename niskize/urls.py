@@ -5,11 +5,19 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    #postsurls
     path('api/posts/',views.PostsLists.as_view()),
     #singlepost
     path('api/post/<int:pk>/',views.SinglePost.as_view()),
     #update/delete
     path('api/update/post/<int:pk>/',views.PostsLists.as_view()),
+
+    #articlesurls
+    path('api/articles/', views.ArticleList.as_view()),
+    #singlepost
+    path('api/article/<int:pk>/', views.SingleArticle.as_view()),
+    #update/delete
+    path('api/update/article/<int:pk>/', views.ArticleList.as_view()),
 ]
 
 if settings.DEBUG:
