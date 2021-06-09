@@ -5,30 +5,15 @@ import uuid
 from cloudinary.models import CloudinaryField
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from authentication.models import User
 # Create your models here.
-
-class Profile(models.Model):
-  user=models.OneToOneField(User,on_delete=models.CASCADE, related_name='profile')
-  name = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
-  def __str__(self):
-    return str(self.name)
-  
-  @receiver(post_save, sender=User)
-  def create_user_profile(sender, instance, created, **kwargs):
-      if created:
-          Profile.objects.create(user=instance)
-  
-  @receiver(post_save, sender=User)
-  def save_user_profile(sender, instance, **kwargs):
-      instance.profile.save()
 
 class Articles(models.Model):
   title = models.CharField(max_length=120)
   content = models.TextField()
   image=CloudinaryField('article image',null=True)
   pub_date=models.DateTimeField(auto_now_add=True)
-  profile = models.ForeignKey(Profile, on_delete=models.CASCADE,null=True)
+  user = models.ForeignKey(User, related_name='articles', on_delete=models.CASCADE,null=True)
   category=models.CharField(max_length=70,null=True)
 
   def __str__(self):
@@ -42,7 +27,7 @@ class Posts(models.Model):
   content=models.TextField(null=True)
   comment=models.TextField(null=True)
   pub_date=models.DateTimeField(auto_now_add=True)
-  profile=models.ForeignKey(Profile,related_name='posts',on_delete=models.CASCADE,null=True)
+  user=models.ForeignKey(User,related_name='posts',on_delete=models.CASCADE,null=True)
 
   def __str__(self):
     return self.title
