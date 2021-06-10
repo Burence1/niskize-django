@@ -28,7 +28,7 @@ urlpatterns = [
     path('api/comments/',views.CommentList.as_view()),
     #delete/update
     path('api/update/comment/<int:pk>/',views.CommentList.as_view()),
-    #singlepost
+    #singlecomment
     path('api/comment/<int:pk>/',views.SingleComment.as_view())
 ]
 
