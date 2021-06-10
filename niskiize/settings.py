@@ -44,36 +44,39 @@ INSTALLED_APPS = [
     #apps
     'niskize',
     'authentication',
+    #rest Api
     'rest_framework',
     'cloudinary',
     'rest_framework.authtoken',
+    'corsheaders',
 
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework_json_api.parsers.JSONParser',
-        'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser',
-    ],
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ],
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.TokenAuthentication',
+#         'rest_framework.authentication.BasicAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#     ],
+#     'DEFAULT_PARSER_CLASSES': [
+#         'rest_framework_json_api.parsers.JSONParser',
+#         'rest_framework.parsers.FormParser',
+#         'rest_framework.parsers.MultiPartParser',
+#     ],
+#     'DEFAULT_RENDERER_CLASSES': [
+#         'rest_framework.renderers.JSONRenderer',
+#         'rest_framework.renderers.BrowsableAPIRenderer',
+#     ],
 
-    'NON_FIELD_ERRORS_KEY': 'error',
-}
+#     'NON_FIELD_ERRORS_KEY': 'error',
+# }
 
 AUTH_USER_MODEL = 'authentication.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -101,6 +104,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'niskiize.wsgi.application'
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:4200',
+)
+
+cloudinary.config(
+    cloud_name="burens",
+    api_key="727223526185189",
+    api_secret="i5QqXId24yed4oDPoFnfOmVStKQ",
+)
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

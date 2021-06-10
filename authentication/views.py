@@ -5,20 +5,16 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
 import jwt
 import datetime
-
 from .models import User
-
 from .serializers import UserSerializer
-
 
 class RegisterView(APIView):
     serializer_class=UserSerializer
-    def post(self, request):
+    def post(self, request,format=None):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-
 
 class LoginView(APIView):
     def post(self, request):
@@ -32,6 +28,9 @@ class LoginView(APIView):
 
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect password!')
+        
+        if password is None:
+            raise AuthenticationFailed('Input password found!')
 
         payload = {
             'id': user.id,
@@ -40,6 +39,7 @@ class LoginView(APIView):
         }
 
         token = jwt.encode(payload, 'secret', algorithm='HS256')
+        print(token)
 
         response = Response()
 
@@ -48,6 +48,7 @@ class LoginView(APIView):
             'jwt': token
         }
 
+        print(response)
         return response
 
 
@@ -56,12 +57,12 @@ class UserView(APIView):
         token = request.COOKIES.get('jwt')
 
         if not token:
-            raise AuthenticationFailed('Unauthenticated')
+            raise AuthenticationFailed('Invalid')
 
         try:
             payload = jwt.decode(token, 'secret', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Unauthenticated')
+            raise AuthenticationFailed('Invalid')
 
         user = User.objects.filter(id=payload['id']).first()
         serializer = UserSerializer(user)

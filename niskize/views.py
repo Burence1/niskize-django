@@ -120,7 +120,7 @@ class ArticleList(APIView):
       return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
   def delete(self, request, pk, format=None):
-    post = self.get_post(pk)
+    post = self.get_article(pk)
     post.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -172,3 +172,68 @@ class SubscribersList(APIView):
     subscribers = self.get_subscriber(pk)
     subscribers.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CommentList(APIView):
+  serializer_class=CommentSerialisers
+
+  def get_comment(self, pk):
+    try:
+        return Comment.objects.get(pk=pk)
+    except Comment.DoesNotExist:
+        return Http404()
+
+  def get(self, request, format=None):
+    comments = Comment.objects.all()
+    serializers = self.serializer_class(comments, many=True)
+    return Response(serializers.data)
+
+  def post(self, request, format=None):
+    serializers = self.serializer_class(data=request.data)
+    if serializers.is_valid():
+      serializers.save()
+      comments = serializers.data
+      response = {
+          'data': {
+              'comments': dict(comments),
+              'status': 'success',
+              'message': 'comment added successfully',
+          }
+      }
+      return Response(response, status=status.HTTP_200_OK)
+    return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def put(self, request, pk, format=None):
+    comment = self.get_comment(pk)
+    serializers = self.serializer_class(comment, request.data)
+    if serializers.is_valid():
+      serializers.save()
+      comments = serializers.data
+      response = {
+          'data': {
+              'comments': dict(comments),
+              'status': 'success',
+              'message': ' article updated successfully',
+          }
+      }
+      return Response(response)
+    else:
+      return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    comment = self.get_comment(pk)
+    comment.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+class SingleComment(APIView):
+  serializer_class = CommentSerialisers
+
+  def get_comment(self, pk):
+    try:
+        return Comment.objects.get(pk=pk)
+    except Comment.DoesNotExist:
+        return Http404()
+
+  def get(self, request, pk, format=None):
+    comment = self.get_comment(pk)
+    serializers = self.serializer_class(comment)
+    return Response(serializers.data)

@@ -23,6 +23,13 @@ urlpatterns = [
     path('api/subscribers/', views.SubscribersList.as_view()),
     #delete
     path('api/update/subscriber/<int:pk>/', views.SubscribersList.as_view()),
+
+    #comments
+    path('api/comments/',views.CommentList.as_view()),
+    #delete/update
+    path('api/update/comment/<int:pk>/',views.CommentList.as_view()),
+    #singlepost
+    path('api/comment/<int:pk>/',views.SingleComment.as_view())
 ]
 
 if settings.DEBUG:

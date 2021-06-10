@@ -5,8 +5,6 @@ import uuid
 from cloudinary.models import CloudinaryField
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-import jwt
-from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
